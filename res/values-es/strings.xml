@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mode Enfant</string>
+    <string name="service_name">Mode Enfant – guardián de sesión</string>
+    <string name="service_desc">Solo durante una sesión infantil, este servicio mira qué aplicación está en primer plano para devolver al niño a sus apps permitidas y mostrar avisos de tiempo. No lee el contenido de las pantallas ni envía datos. Fuera de sesión, no hace nada.</string>
+
+    <!-- Pantalla parental -->
+    <string name="step_service">1. Servicio de vigilancia</string>
+    <string name="service_on">✅ Activo. Fuera de la sesión infantil no hace nada: la tableta queda libre para los adultos.</string>
+    <string name="service_needed">⚠ Activar una sola vez: Accesibilidad → Mode Enfant → Activar.</string>
+    <string name="open_accessibility">Abrir ajustes de accesibilidad</string>
+    <string name="service_starting">El servicio está arrancando, reintenta en un segundo.</string>
+    <string name="step_apps">2. Aplicaciones permitidas</string>
+    <string name="choose_apps">Elegir apps</string>
+    <string name="apps_none">Ninguna app elegida</string>
+    <string name="apps_count">%d app(s) permitida(s)</string>
+    <string name="step_duration">3. Duración de la sesión</string>
+    <string name="start">▶  Iniciar modo niño</string>
+    <string name="no_apps_confirm">Ninguna app está permitida: el niño solo verá su pantalla de inicio. ¿Iniciar igualmente?</string>
+    <string name="options">Opciones</string>
+    <string name="voice">Anuncios de voz antes del final (10, 5, 2 y 1 min)</string>
+    <string name="change_pin">Cambiar código parental</string>
+    <string name="pin_changed">Código parental modificado</string>
+    <string name="help">Durante la sesión, una pulsación larga en el candado permite a los padres añadir tiempo o parar. ¿Código olvidado? Responde a la cuenta.</string>
+
+    <!-- Lista de apps -->
+    <string name="apps_header">Toca una app para permitirla o quitarla.</string>
+    <string name="settings_warning">⚠ No recomendado: da acceso a los ajustes</string>
+
+    <!-- Espacio infantil -->
+    <string name="parent_hint">Padres: pulsación larga en el candado</string>
+    <string name="parents">Padres</string>
+    <string name="add_5">Añadir 5 minutos</string>
+    <string name="add_15">Añadir 15 minutos</string>
+    <string name="end_session">Terminar modo niño</string>
+    <string name="time_up_title">¡Pausa de recarga!</string>
+    <string name="time_up_text">El robot va a recargar sus pilas. ¡Hasta pronto!</string>
+    <string name="no_apps">Ninguna app por ahora.</string>
+    <string name="service_off">Servicio inactivo</string>
+    <string name="curtain_text">Volviendo a la base…</string>
+
+    <!-- Avisos progresivos -->
+    <string name="warn_minutes">¡Bip-bip! Quedan %d minutos de juego</string>
+    <string name="warn_last_minute">¡Último minuto antes de la recarga!</string>
+
+    <!-- Código parental -->
+    <string name="pin_title">Código parental</string>
+    <string name="pin_create">Elige un código parental (4 dígitos)</string>
+    <string name="pin_confirm">Confirma el código</string>
+    <string name="pin_mismatch">Los códigos son diferentes, empieza de nuevo</string>
+    <string name="pin_wrong">Código incorrecto</string>
+    <string name="pin_locked">Demasiados intentos, espera %d s</string>
+    <string name="pin_forgot">¿Código olvidado?</string>
+    <string name="math_question">¿Cuánto es %1$d × %2$d?</string>
+    <string name="math_wrong">Respuesta incorrecta</string>
+</resources>

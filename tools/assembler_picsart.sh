@@ -1,16 +1,28 @@
 #!/usr/bin/env bash
-# Assemble les annonces voix_* finales (res/raw/*.m4a) à partir des sources
-# générées par Picsart dans tmp_picsart/ (tts_*.wav + sfx_*.wav).
-# Schéma de chaque piste : [SFX] + 0,35 s de silence + [TTS], puis loudnorm -23 LUFS,
-# mono 22 kHz, AAC 40 kbps — même cible que tools/voix.sh (res/raw/).
-# Le filtrage vocal (highpass/de-esser) ne s'applique qu'aux voix ; les SFX gardent
-# leurs aigus pour la clarté des petits bips.
-# NB : loudnorm est fait dans une SECONDE passe ffmpeg — dans le même filter_complex
-# qu'un concat il perd ~1,7 s en fin de fichier (bug connu du lookahead interne).
+# Assemble les annonces voix_* finales à partir des sources générées par
+# Picsart dans tmp_picsart/ : TTS par langue dans tmp_picsart/<lang>/, SFX
+# (sans langue) partagés dans tmp_picsart/. Schéma de chaque piste :
+# [SFX] + 0,35 s de silence + [TTS], puis loudnorm -23 LUFS, mono 22 kHz,
+# AAC 40 kbps — même cible que tools/voix.sh.
+#
+# LANG : fr | en | es (défaut fr). Sortie : res/raw/ pour en (défaut Android),
+# res/raw-<lang>/ pour les autres langues.
+#
+# Le filtrage vocal (highpass/de-esser) ne s'applique qu'aux voix ; les SFX
+# gardent leurs aigus pour la clarté des petits bips.
+# NB : loudnorm est fait dans une SECONDE passe ffmpeg — dans le même
+# filter_complex qu'un concat il perd ~1,7 s en fin de fichier (bug connu
+# du lookahead interne).
 set -euo pipefail
 cd "$(dirname "$0")"
-SRC="tmp_picsart"
+
+LANG="${LANG:-fr}"
+SRC_SFX="tmp_picsart"
+SRC_TTS="tmp_picsart/$LANG"
 OUT="../res/raw"
+[[ "$LANG" == "en" ]] || OUT="../res/raw-$LANG"
+mkdir -p "$OUT"
+
 TMPW="$(mktemp -t voixmix).wav"
 trap 'rm -f "$TMPW"' EXIT
 
@@ -35,7 +47,7 @@ for p in "${PISTES[@]}"; do
     sfx="${reste%%|*}"; tts="${reste#*|}"
     # passe 1 : mix [SFX] + 0,35 s + [TTS]
     ffmpeg -loglevel error -y \
-        -i "$SRC/$sfx.wav" -i "$SRC/$tts.wav" \
+        -i "$SRC_SFX/$sfx.wav" -i "$SRC_TTS/$tts.wav" \
         -f lavfi -t 0.35 -i "anullsrc=r=44100:cl=mono" \
         -filter_complex "\
 [0:a]${TRIM}[s];\
@@ -48,5 +60,5 @@ for p in "${PISTES[@]}"; do
         -af "loudnorm=I=-23:TP=-2:LRA=7,aresample=22050,aformat=channel_layouts=mono" \
         -c:a aac -b:a 40k "$OUT/$nom.m4a"
     d=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/$nom.m4a")
-    echo "$nom.m4a  ${d}s"
+    echo "$OUT/$nom.m4a  ${d}s"
 done

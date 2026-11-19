@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Mode Enfant</string>
-    <string name="service_name">Mode Enfant – gardien de session</string>
-    <string name="service_desc">Pendant une session enfant uniquement, ce service regarde quelle application est au premier plan pour ramener l’enfant vers ses applis autorisées et afficher les avertissements de temps. Il ne lit pas le contenu des écrans et n’envoie aucune donnée. Hors session, il ne fait rien.</string>
+    <string name="service_name">Mode Enfant – session guardian</string>
+    <string name="service_desc">During a child session only, this service checks which app is in the foreground to bring your child back to their allowed apps and show time warnings. It does not read screen content and sends no data. Outside a session, it does nothing.</string>
 
-    <!-- Écran parent -->
-    <string name="step_service">1. Service de surveillance</string>
-    <string name="service_on">✅ Actif. Hors session enfant il ne fait rien : la tablette reste libre pour les adultes.</string>
-    <string name="service_needed">⚠ À activer une seule fois : Accessibilité → Mode Enfant → Activer.</string>
-    <string name="open_accessibility">Ouvrir les réglages d’accessibilité</string>
-    <string name="service_starting">Le service démarre, réessaie dans une seconde.</string>
-    <string name="step_apps">2. Applications autorisées</string>
-    <string name="choose_apps">Choisir les applis</string>
-    <string name="apps_none">Aucune appli choisie</string>
-    <string name="apps_count">%d appli(s) autorisée(s)</string>
-    <string name="step_duration">3. Durée de la session</string>
-    <string name="start">▶  Lancer le mode enfant</string>
-    <string name="no_apps_confirm">Aucune appli n’est autorisée : l’enfant ne verra que son écran d’accueil. Lancer quand même ?</string>
+    <!-- Parent screen -->
+    <string name="step_service">1. Watchdog service</string>
+    <string name="service_on">✅ Active. Outside a child session it does nothing: the tablet stays free for adults.</string>
+    <string name="service_needed">⚠ Enable once: Accessibility → Mode Enfant → Enable.</string>
+    <string name="open_accessibility">Open accessibility settings</string>
+    <string name="service_starting">The service is starting, retry in a second.</string>
+    <string name="step_apps">2. Allowed apps</string>
+    <string name="choose_apps">Choose apps</string>
+    <string name="apps_none">No app chosen</string>
+    <string name="apps_count">%d app(s) allowed</string>
+    <string name="step_duration">3. Session length</string>
+    <string name="start">▶  Start kid mode</string>
+    <string name="no_apps_confirm">No app is allowed: your child will only see their home screen. Start anyway?</string>
     <string name="options">Options</string>
-    <string name="voice">Annonces vocales avant la fin (10, 5, 2 et 1 min)</string>
-    <string name="change_pin">Changer le code parent</string>
-    <string name="pin_changed">Code parent modifié</string>
-    <string name="help">Pendant la session, un appui long sur le cadenas permet aux parents d’ajouter du temps ou d’arrêter. Code oublié : réponds à la question de calcul.</string>
+    <string name="voice">Voice announcements before the end (10, 5, 2 and 1 min)</string>
+    <string name="change_pin">Change parent code</string>
+    <string name="pin_changed">Parent code changed</string>
+    <string name="help">During a session, a long-press on the padlock lets parents add time or stop. Forgot the code? Answer the math question.</string>
 
-    <!-- Liste des applis -->
-    <string name="apps_header">Touche une appli pour l’autoriser ou la retirer.</string>
-    <string name="settings_warning">⚠ Déconseillé : donne accès aux réglages</string>
+    <!-- App list -->
+    <string name="apps_header">Tap an app to allow or remove it.</string>
+    <string name="settings_warning">⚠ Not recommended: gives access to settings</string>
 
-    <!-- Espace enfant -->
-    <string name="parent_hint">Parents : appui long sur le cadenas</string>
+    <!-- Kid space -->
+    <string name="parent_hint">Parents: long-press the padlock</string>
     <string name="parents">Parents</string>
-    <string name="add_5">Ajouter 5 minutes</string>
-    <string name="add_15">Ajouter 15 minutes</string>
-    <string name="end_session">Terminer le mode enfant</string>
-    <string name="time_up_title">Pause recharge !</string>
-    <string name="time_up_text">Le robot va recharger ses batteries. À bientôt !</string>
-    <string name="no_apps">Aucune appli pour l’instant.</string>
-    <string name="service_off">Service inactif</string>
-    <string name="curtain_text">Retour à la base en cours…</string>
+    <string name="add_5">Add 5 minutes</string>
+    <string name="add_15">Add 15 minutes</string>
+    <string name="end_session">End kid mode</string>
+    <string name="time_up_title">Recharge break!</string>
+    <string name="time_up_text">The robot is recharging its batteries. See you soon!</string>
+    <string name="no_apps">No apps yet.</string>
+    <string name="service_off">Service inactive</string>
+    <string name="curtain_text">Back to base…</string>
 
-    <!-- Avertissements progressifs -->
-    <string name="warn_minutes">Bip-bip ! Encore %d minutes de jeu</string>
-    <string name="warn_last_minute">Dernière minute avant la recharge !</string>
+    <!-- Progressive warnings -->
+    <string name="warn_minutes">Beep-boop! %d minutes of play left</string>
+    <string name="warn_last_minute">Last minute before recharge!</string>
 
-    <!-- Code parent -->
-    <string name="pin_title">Code parent</string>
-    <string name="pin_create">Choisis un code parent (4 chiffres)</string>
-    <string name="pin_confirm">Confirme le code</string>
-    <string name="pin_mismatch">Les codes sont différents, recommence</string>
-    <string name="pin_wrong">Code incorrect</string>
-    <string name="pin_locked">Trop d’essais, attends %d s</string>
-    <string name="pin_forgot">Code oublié ?</string>
-    <string name="math_question">Combien font %1$d × %2$d ?</string>
-    <string name="math_wrong">Mauvaise réponse</string>
+    <!-- Parent code -->
+    <string name="pin_title">Parent code</string>
+    <string name="pin_create">Choose a parent code (4 digits)</string>
+    <string name="pin_confirm">Confirm the code</string>
+    <string name="pin_mismatch">Codes differ, start over</string>
+    <string name="pin_wrong">Wrong code</string>
+    <string name="pin_locked">Too many tries, wait %d s</string>
+    <string name="pin_forgot">Forgot code?</string>
+    <string name="math_question">What is %1$d × %2$d?</string>
+    <string name="math_wrong">Wrong answer</string>
 </resources>
