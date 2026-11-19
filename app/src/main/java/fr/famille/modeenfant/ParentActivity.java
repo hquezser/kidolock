@@ -191,7 +191,10 @@ public class ParentActivity extends Activity {
                 getColor(on ? R.color.success_soft : R.color.destructive_soft), 16));
         serviceRow.setVisibility(on ? View.GONE : View.VISIBLE);
 
-        int n = prefs.allowedApps().size();
+        int n = 0;
+        for (String pkg : prefs.allowedApps()) {
+            if (getPackageManager().getLaunchIntentForPackage(pkg) != null) n++;
+        }
         appsCount.setText(n == 0 ? getString(R.string.apps_none) : getString(R.string.apps_count, n));
         durationText.setText(minutes + " min");
         startTopBtn.setEnabled(on);

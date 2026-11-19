@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -80,6 +81,10 @@ public class AppListActivity extends Activity {
             // Applis déjà autorisées en tête, puis ordre alphabétique (tri stable).
             Collections.sort(all, (a, b) -> Boolean.compare(!allowed.contains(a.pkg), !allowed.contains(b.pkg)));
             runOnUiThread(() -> {
+                Set<String> valid = new HashSet<>();
+                for (AppCache.Entry e : all) valid.add(e.pkg);
+                allowed.retainAll(valid);
+                prefs.setAllowedApps(allowed);
                 apps.addAll(all);
                 adapter.notifyDataSetChanged();
                 progress.setVisibility(View.GONE);
