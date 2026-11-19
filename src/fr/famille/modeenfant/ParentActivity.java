@@ -22,7 +22,7 @@ public class ParentActivity extends Activity {
     private Prefs prefs;
     private View content;
     private TextView serviceStatus, appsCount, durationText;
-    private Button serviceBtn, startBtn;
+    private Button serviceBtn, startBtn, styleYoung, styleMature;
     private boolean unlocked;
     private long stoppedAt;
     private int minutes;
@@ -52,6 +52,11 @@ public class ParentActivity extends Activity {
         CheckBox voice = findViewById(R.id.voice);
         voice.setChecked(prefs.voiceEnabled());
         voice.setOnCheckedChangeListener((b, on) -> prefs.setVoiceEnabled(on));
+
+        styleYoung = findViewById(R.id.style_young);
+        styleMature = findViewById(R.id.style_mature);
+        styleYoung.setOnClickListener(v -> setMaturity(0));
+        styleMature.setOnClickListener(v -> setMaturity(1));
 
         LinearLayout presets = findViewById(R.id.presets);
         for (int m : PRESETS) {
@@ -108,6 +113,13 @@ public class ParentActivity extends Activity {
         durationText.setText(minutes + " min");
         startBtn.setEnabled(on);
         startBtn.setAlpha(on ? 1f : 0.5f);
+        styleYoung.setAlpha(prefs.maturity() == 0 ? 1f : 0.5f);
+        styleMature.setAlpha(prefs.maturity() == 1 ? 1f : 0.5f);
+    }
+
+    private void setMaturity(int tier) {
+        prefs.setMaturity(tier);
+        render();
     }
 
     private void setMinutes(int m) {

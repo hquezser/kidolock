@@ -5,8 +5,10 @@
 # [SFX] + 0,35 s de silence + [TTS], puis loudnorm -23 LUFS, mono 22 kHz,
 # AAC 40 kbps — même cible que tools/voix.sh.
 #
-# LANG : fr | en | es (défaut fr). Sortie : res/raw/ pour en (défaut Android),
-# res/raw-<lang>/ pour les autres langues.
+# LANG : fr | en | es (défaut fr). TIER : vide (jeune, défaut) ou ex. t1
+# (grand). TTS : tmp_picsart[_t1]/<lang>/, SFX partagés dans tmp_picsart/.
+# Sortie : res/raw/ pour en (défaut Android), res/raw-<lang>/ sinon ;
+# suffixe _t1 dans le nom de fichier quand TIER=t1.
 #
 # Le filtrage vocal (highpass/de-esser) ne s'applique qu'aux voix ; les SFX
 # gardent leurs aigus pour la clarté des petits bips.
@@ -17,11 +19,13 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 LANG="${LANG:-fr}"
+TIER="${TIER:-}"
 SRC_SFX="tmp_picsart"
-SRC_TTS="tmp_picsart/$LANG"
+SRC_TTS="tmp_picsart${TIER:+_$TIER}/$LANG"
 OUT="../res/raw"
 [[ "$LANG" == "en" ]] || OUT="../res/raw-$LANG"
 mkdir -p "$OUT"
+SUF="${TIER:+_$TIER}"
 
 TMPW="$(mktemp -t voixmix).wav"
 trap 'rm -f "$TMPW"' EXIT
@@ -58,7 +62,7 @@ for p in "${PISTES[@]}"; do
     # passe 2 : normalisation -23 LUFS + encodage AAC 40 kbps mono
     ffmpeg -loglevel error -y -i "$TMPW" \
         -af "loudnorm=I=-23:TP=-2:LRA=7,aresample=22050,aformat=channel_layouts=mono" \
-        -c:a aac -b:a 40k "$OUT/$nom.m4a"
-    d=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/$nom.m4a")
-    echo "$OUT/$nom.m4a  ${d}s"
+        -c:a aac -b:a 40k "$OUT/${nom}${SUF}.m4a"
+    d=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/${nom}${SUF}.m4a")
+    echo "$OUT/${nom}${SUF}.m4a  ${d}s"
 done

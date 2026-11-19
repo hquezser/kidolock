@@ -250,9 +250,10 @@ public class GuardService extends AccessibilityService {
     private void warn(long at) {
         int min = (int) (at / MIN);
         // Robot content pour les rappels, fatigué quand ça devient urgent.
-        int mascot = min <= 2 ? R.drawable.mascotte_fatigue : R.drawable.mascotte_actif;
-        showBanner(mascot, min == 1 ? getString(R.string.warn_last_minute) : getString(R.string.warn_minutes, min));
-        speak(min == 10 ? R.raw.voix_10min : min == 5 ? R.raw.voix_5min : min == 2 ? R.raw.voix_2min : R.raw.voix_1min);
+        String state = min <= 2 ? "mascotte_fatigue" : "mascotte_actif";
+        showBanner(Ui.drawableFor(this, state),
+                min == 1 ? getString(R.string.warn_last_minute) : getString(R.string.warn_minutes, min));
+        speak(Ui.rawFor(this, min == 10 ? "voix_10min" : min == 5 ? "voix_5min" : min == 2 ? "voix_2min" : "voix_1min"));
     }
 
     private void expire() {
@@ -263,7 +264,7 @@ public class GuardService extends AccessibilityService {
         removeBubble();
         removeBanner();
         save();
-        speak(R.raw.voix_fin);
+        speak(Ui.rawFor(this, "voix_fin"));
         if (!ownInFront) {
             showCurtain();
             launchKidHome();

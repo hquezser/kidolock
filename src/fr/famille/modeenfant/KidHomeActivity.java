@@ -44,6 +44,8 @@ public class KidHomeActivity extends Activity {
         timeText = findViewById(R.id.time_text);
         empty = findViewById(R.id.empty);
         expiredPanel = findViewById(R.id.expired_panel);
+        ((ImageView) findViewById(R.id.expired_mascot))
+                .setImageResource(Ui.drawableFor(this, "mascotte_fin"));
 
         adapter = new BaseAdapter() {
             @Override

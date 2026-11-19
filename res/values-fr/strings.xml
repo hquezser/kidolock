@@ -53,4 +53,9 @@
     <string name="pin_forgot">Code oublié ?</string>
     <string name="math_question">Combien font %1$d × %2$d ?</string>
     <string name="math_wrong">Mauvaise réponse</string>
+
+    <!-- Style du personnage -->
+    <string name="style_label">Robot et voix</string>
+    <string name="style_young">Petit · 3–6 ans</string>
+    <string name="style_mature">Grand · 7–11 ans</string>
 </resources>

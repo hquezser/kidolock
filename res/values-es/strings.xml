@@ -53,4 +53,9 @@
     <string name="pin_forgot">¿Código olvidado?</string>
     <string name="math_question">¿Cuánto es %1$d × %2$d?</string>
     <string name="math_wrong">Respuesta incorrecta</string>
+
+    <!-- Estilo del personaje -->
+    <string name="style_label">Robot y voz</string>
+    <string name="style_young">Pequeño · 3–6 años</string>
+    <string name="style_mature">Mayor · 7–11 años</string>
 </resources>

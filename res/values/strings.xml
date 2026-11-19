@@ -53,4 +53,9 @@
     <string name="pin_forgot">Forgot code?</string>
     <string name="math_question">What is %1$d × %2$d?</string>
     <string name="math_wrong">Wrong answer</string>
+
+    <!-- Character style -->
+    <string name="style_label">Robot &amp; voice</string>
+    <string name="style_young">Little · ages 3–6</string>
+    <string name="style_mature">Big · ages 7–11</string>
 </resources>

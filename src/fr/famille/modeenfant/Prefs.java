@@ -66,6 +66,15 @@ final class Prefs {
         sp.edit().putBoolean("voice", on).apply();
     }
 
+    /** Niveau de maturité du personnage (0 = jeune, 1 = plus grand…). */
+    int maturity() {
+        return sp.getInt("maturity", 0);
+    }
+
+    void setMaturity(int tier) {
+        sp.edit().putInt("maturity", tier).apply();
+    }
+
     // --- Session en cours ---
 
     boolean sessionActive() {
