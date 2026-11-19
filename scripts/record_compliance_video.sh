@@ -27,7 +27,28 @@ fi
 ADB="adb ${SERIAL:+-s $SERIAL}"
 
 TMP=$(mktemp -d)
-trap 'rm -rf "$TMP"' EXIT
+
+# Capture en 1280x800 à densité identique : UI strictement identique,
+# PNG ~4x plus légers → screencap ~3x plus rapide. Restauré à la sortie.
+ORIG_SIZE=$($ADB shell wm size | grep -oE '[0-9]+x[0-9]+' | tail -1)
+ORIG_DENS=$($ADB shell wm density | grep -oE '[0-9]+' | tail -1)
+cleanup() {
+    $ADB shell wm size "$ORIG_SIZE" >/dev/null 2>&1 || true
+    [[ -n "$ORIG_DENS" ]] && $ADB shell wm density "$ORIG_DENS" >/dev/null 2>&1 || true
+    rm -rf "$TMP"
+}
+trap cleanup EXIT
+
+RW=${ORIG_SIZE%x*}
+if [[ "$RW" -gt 1280 ]]; then
+    # Même densité réduite proportionnellement → même taille logique (dp), UI identique.
+    NEW_DENS=""
+    [[ -n "$ORIG_DENS" && "$ORIG_DENS" -gt 0 ]] && NEW_DENS=$(( ORIG_DENS * 1280 / RW ))
+    echo "→ capture en 1280x800 (UI identique, plus rapide)"
+    $ADB shell wm size 1280x800
+    [[ -n "$NEW_DENS" ]] && $ADB shell wm density "$NEW_DENS"
+    sleep 1   # laisse les activities se recréer à la nouvelle taille
+fi
 
 echo "Capture en cours → $OUT"
 echo "Scénario à jouer pendant la capture :"
@@ -50,11 +71,11 @@ END=$(date +%s); DUR=$((END - START )); DUR=$(( DUR > 0 ? DUR : 1 ))
 N=$i
 [[ "$N" -lt 5 ]] && { echo "ERREUR : capture trop courte ($N images)." >&2; exit 1; }
 
-FPS=$(awk "BEGIN { printf \"%.2f\", $N / $DUR }")
-echo "→ $N images en ${DUR}s (~${FPS} img/s), assemblage…"
+# fps en rationnel exact — pas de souci de virgule/décimale locale.
+echo "→ $N images en ${DUR}s, assemblage…"
 
 ffmpeg -y -loglevel error \
-    -framerate "$FPS" -i "$TMP/f%05d.png" \
+    -framerate "$N/$DUR" -i "$TMP/f%05d.png" \
     -vf "scale='min(1600,iw)':-2" \
     -c:v libx264 -preset fast -crf 23 -pix_fmt yuv420p -movflags +faststart \
     "$OUT"
