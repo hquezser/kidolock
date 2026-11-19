@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icône : une maison sur un disque orangé. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FB8C00"
+        android:pathData="M24,2A22,22 0,1 1,24 46A22,22 0,1 1,24 2Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,11L10,23h4.5v13h7v-8h5v8h7V23H38z" />
+</vector>

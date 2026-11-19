@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/parent_bg">
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:visibility="invisible">
+
+        <!-- 1. Service -->
+        <LinearLayout style="@style/Card">
+            <TextView style="@style/CardTitle" android:text="@string/step_service" />
+            <TextView android:id="@+id/service_status" style="@style/CardText" />
+            <Button
+                android:id="@+id/service_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/open_accessibility" />
+        </LinearLayout>
+
+        <!-- 2. Applis -->
+        <LinearLayout style="@style/Card">
+            <TextView style="@style/CardTitle" android:text="@string/step_apps" />
+            <TextView android:id="@+id/apps_count" style="@style/CardText" />
+            <Button
+                android:id="@+id/apps_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/choose_apps" />
+        </LinearLayout>
+
+        <!-- 3. Durée -->
+        <LinearLayout style="@style/Card">
+            <TextView style="@style/CardTitle" android:text="@string/step_duration" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/minus_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="64dp"
+                    android:text="−5"
+                    android:textSize="22sp" />
+                <TextView
+                    android:id="@+id/duration"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/text_main"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/plus_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="64dp"
+                    android:text="+5"
+                    android:textSize="22sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/presets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/start_btn"
+            android:layout_width="match_parent"
+            android:layout_height="84dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/accent"
+            android:text="@string/start"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
+
+        <!-- Options -->
+        <LinearLayout style="@style/Card">
+            <TextView style="@style/CardTitle" android:text="@string/options" />
+            <CheckBox
+                android:id="@+id/voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/voice"
+                android:textSize="16sp" />
+            <Button
+                android:id="@+id/pin_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/change_pin" />
+            <TextView
+                style="@style/CardText"
+                android:layout_marginTop="8dp"
+                android:text="@string/help"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

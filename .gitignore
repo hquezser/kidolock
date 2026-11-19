@@ -1,0 +1,4 @@
+build/
+tools/*.m4a
+tools/tmp_picsart/
+.DS_Store

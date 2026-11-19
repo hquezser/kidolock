@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/kid_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Barre du haut : disque de temps (lisible sans savoir lire) + cadenas parents -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="28dp"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp">
+
+            <fr.famille.modeenfant.TimerView
+                android:id="@+id/timer"
+                android:layout_width="72dp"
+                android:layout_height="72dp" />
+
+            <TextView
+                android:id="@+id/time_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_weight="1"
+                android:textColor="@color/kid_text"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/parent_btn"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:alpha="0.45"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:padding="14dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_lock" />
+        </LinearLayout>
+
+        <GridView
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:columnWidth="170dp"
+            android:gravity="center"
+            android:numColumns="auto_fit"
+            android:padding="32dp"
+            android:stretchMode="spacingWidthUniform"
+            android:verticalSpacing="28dp" />
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="40dp"
+            android:text="@string/no_apps"
+            android:textColor="@color/kid_text"
+            android:textSize="24sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Fin de session -->
+    <FrameLayout
+        android:id="@+id/expired_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/night"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="@null"
+                android:src="@drawable/mascotte_fin" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/time_up_title"
+                android:textColor="#FFFFFF"
+                android:textSize="52sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/time_up_text"
+                android:textColor="#D0D6F0"
+                android:textSize="26sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/parent_btn2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="top|right"
+            android:layout_margin="20dp"
+            android:alpha="0.45"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="14dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_lock"
+            android:tint="#FFFFFF" />
+    </FrameLayout>
+</FrameLayout>
