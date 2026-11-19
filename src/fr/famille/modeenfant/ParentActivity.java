@@ -66,6 +66,7 @@ public class ParentActivity extends Activity {
         findViewById(R.id.minus_btn).setOnClickListener(v -> setMinutes(minutes - 5));
         findViewById(R.id.plus_btn).setOnClickListener(v -> setMinutes(minutes + 5));
         startBtn.setOnClickListener(v -> start());
+        findViewById(R.id.start_top).setOnClickListener(v -> start());
         findViewById(R.id.pin_btn).setOnClickListener(v -> PinPad.createPin(this, true,
                 () -> Toast.makeText(this, R.string.pin_changed, Toast.LENGTH_SHORT).show()));
 
@@ -103,6 +104,8 @@ public class ParentActivity extends Activity {
             Button b = new Button(this);
             b.setTextSize(15);
             b.setTypeface(b.getTypeface(), android.graphics.Typeface.BOLD);
+            b.setPadding(Ui.dp(this, 8), Ui.dp(this, 10), Ui.dp(this, 8), Ui.dp(this, 10));
+            b.setMinHeight(Ui.dp(this, 44));
             b.setOnClickListener(v -> setMinutes(m));
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0,
                     LinearLayout.LayoutParams.WRAP_CONTENT, 1f);

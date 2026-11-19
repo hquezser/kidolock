@@ -16,6 +16,7 @@
     <string name="apps_count">%d appli(s) autorisée(s)</string>
     <string name="step_duration">3. Durée de la session</string>
     <string name="start">▶  Lancer le mode enfant</string>
+    <string name="start_short">Lancer</string>
     <string name="no_apps_confirm">Aucune appli n’est autorisée : l’enfant ne verra que son écran d’accueil. Lancer quand même ?</string>
     <string name="options">Options</string>
     <string name="voice">Annonces vocales avant la fin (10, 5, 2 et 1 min)</string>

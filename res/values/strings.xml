@@ -16,6 +16,7 @@
     <string name="apps_count">%d app(s) allowed</string>
     <string name="step_duration">3. Session length</string>
     <string name="start">▶  Start kid mode</string>
+    <string name="start_short">Start</string>
     <string name="no_apps_confirm">No app is allowed: your child will only see their home screen. Start anyway?</string>
     <string name="options">Options</string>
     <string name="voice">Voice announcements before the end (10, 5, 2 and 1 min)</string>

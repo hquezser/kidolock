@@ -16,6 +16,7 @@
     <string name="apps_count">%d app(s) permitida(s)</string>
     <string name="step_duration">3. Duración de la sesión</string>
     <string name="start">▶  Iniciar modo niño</string>
+    <string name="start_short">Iniciar</string>
     <string name="no_apps_confirm">Ninguna app está permitida: el niño solo verá su pantalla de inicio. ¿Iniciar igualmente?</string>
     <string name="options">Opciones</string>
     <string name="voice">Anuncios de voz antes del final (10, 5, 2 y 1 min)</string>
