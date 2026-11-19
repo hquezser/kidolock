@@ -34,12 +34,12 @@ public class ParentActivity extends Activity {
     private Prefs prefs;
     private View content;
     private TextView serviceStatus, appsCount, durationText;
-    private Button serviceBtn;
+    private Button serviceBtn, startTopBtn;
     private View serviceRow;
     private MenuItem startItem;
     private View styleCardYoung, styleCardMature, checkYoung, checkMature, personaBox;
     private Switch voice;
-    private final List<Button> presetBtns = new ArrayList<>();
+    private final List<TextView> presetBtns = new ArrayList<>();
     private MediaPlayer preview;
     private boolean unlocked;
     private long stoppedAt;
@@ -64,6 +64,8 @@ public class ParentActivity extends Activity {
         serviceBtn = findViewById(R.id.service_btn);
         serviceRow = findViewById(R.id.service_row);
         personaBox = findViewById(R.id.persona_box);
+        startTopBtn = findViewById(R.id.start_top);
+        startTopBtn.setOnClickListener(v -> start());
 
         serviceBtn.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)));
         findViewById(R.id.apps_btn).setOnClickListener(v -> startActivity(new Intent(this, AppListActivity.class)));
@@ -103,11 +105,12 @@ public class ParentActivity extends Activity {
 
         LinearLayout presets = findViewById(R.id.presets);
         for (int m : PRESETS) {
-            Button b = new Button(this);
+            TextView b = new TextView(this);
             b.setTextSize(15);
             b.setTypeface(b.getTypeface(), android.graphics.Typeface.BOLD);
-            b.setPadding(Ui.dp(this, 8), Ui.dp(this, 10), Ui.dp(this, 8), Ui.dp(this, 10));
-            b.setMinHeight(Ui.dp(this, 44));
+            b.setGravity(android.view.Gravity.CENTER);
+            b.setPadding(Ui.dp(this, 8), Ui.dp(this, 12), Ui.dp(this, 8), Ui.dp(this, 12));
+            b.setMinHeight(Ui.dp(this, 48));
             b.setOnClickListener(v -> setMinutes(m));
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0,
                     LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
@@ -182,6 +185,8 @@ public class ParentActivity extends Activity {
         int n = prefs.allowedApps().size();
         appsCount.setText(n == 0 ? getString(R.string.apps_none) : getString(R.string.apps_count, n));
         durationText.setText(minutes + " min");
+        startTopBtn.setEnabled(on);
+        startTopBtn.setAlpha(on ? 1f : 0.5f);
         if (startItem != null) startItem.setEnabled(on && unlocked);
 
         // Cartes robot : sélection = fond bleu clair + bordure bleue + coche.
@@ -211,7 +216,7 @@ public class ParentActivity extends Activity {
         // Presets : sélection = pastille bleue.
         for (int i = 0; i < PRESETS.length; i++) {
             boolean sel = minutes == PRESETS[i];
-            Button b = presetBtns.get(i);
+            TextView b = presetBtns.get(i);
             b.setText(PRESETS[i] + " min");
             b.setBackground(Ui.rounded(this,
                     getColor(sel ? R.color.primary : R.color.secondary_grey), 24));
