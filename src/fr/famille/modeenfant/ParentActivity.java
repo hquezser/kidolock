@@ -181,7 +181,8 @@ public class ParentActivity extends Activity {
         for (int i = 0; i < LANG_BTNS.length; i++) {
             boolean sel = LANG_CODES[i].equals(lang);
             Button b = (Button) findViewById(LANG_BTNS[i]);
-            b.setBackground(Ui.rounded(this, getColor(sel ? android.R.color.white : 0), 12));
+            b.setBackground(Ui.rounded(this,
+                    sel ? getColor(android.R.color.white) : 0x00000000, 12));
             b.setTextColor(getColor(sel ? R.color.primary : R.color.text_soft));
         }
 
