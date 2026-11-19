@@ -6,6 +6,14 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+PKG="fr.famille.modeenfant"
+if [[ -z "${SERIAL:-}" ]]; then
+    for d in $(adb devices | awk 'NR>1 && $2=="device" {print $1}'); do
+        if adb -s "$d" shell pm list packages "$PKG" 2>/dev/null | grep -q "$PKG"; then
+            SERIAL="$d"; break
+        fi
+    done
+fi
 ADB="adb ${SERIAL:+-s $SERIAL}"
 OUT="${1:-store_assets/kidolock_compliance.mp4}"
 mkdir -p "$(dirname "$OUT")"

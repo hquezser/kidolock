@@ -7,10 +7,25 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-ADB="adb ${SERIAL:+-s $SERIAL}"
+PKG="fr.famille.modeenfant"
+
+# Cible : SERIAL=... ou détection auto de l'appareil ayant KidoLock installé.
+if [[ -z "${SERIAL:-}" ]]; then
+    for d in $(adb devices | awk 'NR>1 && $2=="device" {print $1}'); do
+        if adb -s "$d" shell pm list packages "$PKG" 2>/dev/null | grep -q "$PKG"; then
+            SERIAL="$d"; break
+        fi
+    done
+fi
+if [[ -z "${SERIAL:-}" ]]; then
+    echo "ERREUR : aucun appareil avec $PKG trouvé. Connecte la tablette ou passe SERIAL=ip:port." >&2
+    adb devices >&2
+    exit 1
+fi
+ADB="adb -s $SERIAL"
+echo "Appareil : $SERIAL"
 OUT="store_assets/screenshots"
 mkdir -p "$OUT"
-PKG="fr.famille.modeenfant"
 PIN="${PIN:-}"
 
 SIZE=$($ADB shell wm size | grep -oE '[0-9]+x[0-9]+' | tail -1)
