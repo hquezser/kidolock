@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 # Capture les screenshots Play Store via adb.
-# Prérequis : tablette/émulateur connecté, KidoLock installé, PIN parent connu.
-# Usage : PIN=1234 SERIAL=192.168.1.15:5555 ./scripts/prepare_playstore_media.sh
-# Les coordonnées de tap sont des pourcentages de la résolution détectée —
-# à ajuster une fois sur l'écran réel si besoin (variables TAP_* en tête).
+# Prérequis : tablette/émulateur connecté, KidoLock installé.
+# Usage : ./scripts/prepare_playstore_media.sh
+# Le script détecte seul l'appareil ayant KidoLock, active le mode démo,
+# lance l'app et **te laisse saisir le code PIN manuellement** (appuie sur
+# ENTRÉE dans le terminal une fois déverrouillé). Les taps suivants sont
+# résolus par resource-id via uiautomator — pas de coordonnées à régler.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 PKG="fr.famille.modeenfant"
+OUT="store_assets/screenshots"
+mkdir -p "$OUT"
 
 # Cible : SERIAL=... ou détection auto de l'appareil ayant KidoLock installé.
 if [[ -z "${SERIAL:-}" ]]; then
@@ -24,34 +28,39 @@ if [[ -z "${SERIAL:-}" ]]; then
 fi
 ADB="adb -s $SERIAL"
 echo "Appareil : $SERIAL"
-OUT="store_assets/screenshots"
-mkdir -p "$OUT"
-PIN="${PIN:-}"
 
-SIZE=$($ADB shell wm size | grep -oE '[0-9]+x[0-9]+' | tail -1)
-W=${SIZE%x*}; H=${SIZE#*x}
-echo "Résolution : ${W}x${H}"
+# ---------- helpers ----------
+dump_ui() { $ADB shell uiautomator dump /sdcard/_ui.xml >/dev/null 2>&1; $ADB shell cat /sdcard/_ui.xml; }
+node_xy() { dump_ui | python3 scripts/ui_node.py "$1"; }
+node_text() { dump_ui | python3 scripts/ui_node.py "text:$1"; }
 
-# Pourcentages (x%, y%) — adapter après un premier essai.
-T_PARENT_PIN="${T_PARENT_PIN:-50,18}"     # pavé PIN (premier chiffre approximatif)
-T_PARENT_DOT="${T_PARENT_DOT:-50,30}"     # suite du PIN — même point si saisie auto
-T_UNLOCK="${T_UNLOCK:-50,78}"             # déverrouillage éventuel
-T_APPS="${T_APPS:-50,42}"                 # bouton « Choisir les applis »
-T_BACK="${T_BACK:-6,6}"                   # retour
-T_LAUNCH="${T_LAUNCH:-50,5}"              # « Lancer » dans la barre de titre
-T_LOCK="${T_LOCK:-93,90}"                 # cadenas appui long
-T_PIN_OK="${T_PIN_OK:-50,85}"             # valider PIN modale
-
-tap() { local xy=(${1//,/ }); $ADB shell input tap $(( W * xy[0] / 100 )) $(( H * xy[1] / 100 )); }
-swipe_hold() { local xy=(${1//,/ }); $ADB shell input swipe $(( W * xy[0] / 100 )) $(( H * xy[1] / 100 )) $(( W * xy[0] / 100 )) $(( H * xy[1] / 100 )) 1600; }
+tap_id() {
+    local xy; xy=$(node_xy "$1")
+    [[ -z "$xy" ]] && { echo "  !! vue '$1' introuvable" >&2; return 1; }
+    $ADB shell input tap $xy; sleep 0.6
+}
+hold_id() {
+    local xy; xy=$(node_xy "$1")
+    [[ -z "$xy" ]] && { echo "  !! vue '$1' introuvable" >&2; return 1; }
+    $ADB shell input swipe $xy $xy 1600; sleep 0.6
+}
 shot() { $ADB exec-out screencap -p > "$OUT/$1.png"; echo "→ $OUT/$1.png"; }
 
-if [[ -z "$PIN" ]]; then
-    echo "ERREUR : définis PIN=<code parent> pour saisir le pavé." >&2
-    exit 1
-fi
+wait_id() {  # attend qu'une vue apparaisse (secondes max en $2, défaut 15)
+    local i max=${2:-15}
+    for (( i=0; i<max; i++ )); do
+        [[ -n "$(node_xy "$1")" ]] && return 0
+        sleep 1
+    done
+    echo "  !! '$1' jamais apparue" >&2; return 1
+}
 
-# 1. Mode démo : heure 12:00, batterie 100 %, zéro notification.
+# ---------- 0. état propre ----------
+$ADB shell am broadcast -a com.android.systemui.demo -e command exit >/dev/null 2>&1 || true
+$ADB shell settings put global sysui_demo 0
+$ADB shell am force-stop "$PKG"
+
+# ---------- 1. mode démo : 12:00, batterie 100 %, zéro notification ----------
 $ADB shell settings put global sysui_demo 1
 $ADB shell am broadcast -a com.android.systemui.demo -e command enter
 $ADB shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
@@ -60,40 +69,46 @@ $ADB shell am broadcast -a com.android.systemui.demo -e command network -e wifi 
 $ADB shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
 sleep 1
 
-# 2. Écran parent : lance l'app, saisit le PIN.
-$ADB shell am start -n "$PKG/.ParentActivity"
+# ---------- 2. écran parent : PIN saisi à la main ----------
+$ADB shell am start -n "$PKG/.ParentActivity" >/dev/null
 sleep 2
-for (( i=0; i<${#PIN}; i++ )); do
-    # Position des chiffres sur le pavé : grille 3x4 — à calibrer selon PinPad.
-    # Valeur par défaut : appui au centre du pavé + attente (saisie manuelle conseillée).
-    tap "$T_PARENT_PIN"
-    sleep 0.4
-done
-tap "$T_UNLOCK"
-sleep 1.5
+echo
+echo "=== Déverrouille la tablette avec ton code PIN,"
+echo "=== puis appuie sur ENTRÉE ici pour continuer. ==="
+read -r _
+wait_id apps_btn 30 || { echo "Toujours verrouillé — déverrouille puis relance."; exit 1; }
+sleep 1
 shot 01_config_parent
 
-# 3. Sélecteur d'applications.
-tap "$T_APPS"
-sleep 1.5
+# ---------- 3. sélecteur d'applications ----------
+tap_id apps_btn
+wait_id grid 5 || true   # AppListActivity a sa propre grille ; au pire on shoote quand même
+sleep 1
 shot 02_select_apps
-tap "$T_BACK"
+$ADB shell input keyevent KEYCODE_BACK
 sleep 1
 
-# 4. Session enfant : 5 min → état « Bientôt fini » immédiat (orange).
-tap "$T_LAUNCH"
-sleep 3
-shot 03_session_enfant
-sleep 2
-shot 04_alerte_fin
+# ---------- 4. durée mini (5 min) pour l'état d'alerte ----------
+for (( i=0; i<20; i++ )); do
+    dur=$(node_text duration | grep -oE '[0-9]+' | head -1 || true); dur=${dur:-99}
+    [[ "$dur" -le 5 ]] && break
+    tap_id minus_btn
+done
 
-# 5. Modale parent (appui long sur le cadenas + PIN).
-swipe_hold "$T_LOCK"
+# ---------- 5. session enfant ----------
+tap_id start_top
+sleep 4
+wait_id lock_btn 10 || true
+shot 03_session_enfant
+shot 04_alerte_fin   # session 5 min : état « Bientôt fini » d'emblée
+
+# ---------- 6. modale parent (appui long cadenas) ----------
+hold_id lock_btn
 sleep 1.5
 shot 05_verrouillage_parent
-
-# 6. Restaure la barre d'état et quitte la session si encore active.
 $ADB shell input keyevent KEYCODE_BACK
+
+# ---------- 7. nettoyage ----------
 $ADB shell am broadcast -a com.android.systemui.demo -e command exit
 $ADB shell settings put global sysui_demo 0
-echo "Terminé — vérifie les PNG dans $OUT/ puis ajuste les TAP_* si besoin."
+echo "Terminé — vérifie les PNG dans $OUT/"
