@@ -35,6 +35,7 @@ public class ParentActivity extends Activity {
     private View content;
     private TextView serviceStatus, appsCount, durationText;
     private Button serviceBtn;
+    private View serviceRow;
     private MenuItem startItem;
     private View styleCardYoung, styleCardMature, checkYoung, checkMature, personaBox;
     private Switch voice;
@@ -61,6 +62,7 @@ public class ParentActivity extends Activity {
         appsCount = findViewById(R.id.apps_count);
         durationText = findViewById(R.id.duration);
         serviceBtn = findViewById(R.id.service_btn);
+        serviceRow = findViewById(R.id.service_row);
         personaBox = findViewById(R.id.persona_box);
 
         serviceBtn.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)));
@@ -175,7 +177,7 @@ public class ParentActivity extends Activity {
         serviceStatus.setTextColor(getColor(on ? R.color.success : R.color.warn));
         serviceStatus.setBackground(Ui.rounded(this,
                 getColor(on ? R.color.success_soft : R.color.destructive_soft), 16));
-        serviceBtn.setVisibility(on ? View.GONE : View.VISIBLE);
+        serviceRow.setVisibility(on ? View.GONE : View.VISIBLE);
 
         int n = prefs.allowedApps().size();
         appsCount.setText(n == 0 ? getString(R.string.apps_none) : getString(R.string.apps_count, n));
