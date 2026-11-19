@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -67,12 +68,20 @@ public class ParentActivity extends Activity {
         startTopBtn = findViewById(R.id.start_top);
         startTopBtn.setOnClickListener(v -> start());
 
-        serviceBtn.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)));
+        serviceBtn.setOnClickListener(v -> new AlertDialog.Builder(this)
+                .setTitle(R.string.disclosure_title)
+                .setMessage(R.string.disclosure_text)
+                .setPositiveButton(R.string.disclosure_accept, (d, w) ->
+                        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
+                .setNegativeButton(R.string.disclosure_later, null)
+                .show());
         findViewById(R.id.apps_btn).setOnClickListener(v -> startActivity(new Intent(this, AppListActivity.class)));
         findViewById(R.id.minus_btn).setOnClickListener(v -> setMinutes(minutes - 5));
         findViewById(R.id.plus_btn).setOnClickListener(v -> setMinutes(minutes + 5));
         findViewById(R.id.pin_btn).setOnClickListener(v -> PinPad.createPin(this, true,
                 () -> Toast.makeText(this, R.string.pin_changed, Toast.LENGTH_SHORT).show()));
+        findViewById(R.id.privacy_btn).setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW,
+                Uri.parse(getString(R.string.privacy_url)))));
 
         voice = findViewById(R.id.voice);
         voice.setChecked(prefs.voiceEnabled());

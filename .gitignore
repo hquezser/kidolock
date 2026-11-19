@@ -1,5 +1,15 @@
+# Build / IDE
+.gradle/
 build/
-tools/*.m4a
+app/build/
+local.properties
+*.iml
+.idea/
+.DS_Store
+
+# Signature release — NE JAMAIS COMMITER
+keystore.properties
+*.keystore
+*.jks
 tools/tmp_picsart/
 tools/tmp_picsart_t1/
-.DS_Store

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mode Enfant</string>
+    <string name="app_name">KidoLock</string>
     <string name="service_name">Mode Enfant – guardián de sesión</string>
     <string name="service_desc">Solo durante una sesión infantil, este servicio mira qué aplicación está en primer plano para devolver al niño a sus apps permitidas y mostrar avisos de tiempo. No lee el contenido de las pantallas ni envía datos. Fuera de sesión, no hace nada.</string>
 
@@ -75,4 +75,9 @@
     <string name="kid_mood_end">¡Se acabó, bravo!</string>
     <string name="add_5min">+5 min</string>
     <string name="add_15min">+15 min</string>
+    <string name="disclosure_title">Permiso necesario</string>
+    <string name="disclosure_text">KidoLock usa el servicio de accesibilidad de Android para detectar la aplicación en primer plano y aplicar el tiempo de juego del niño: bloquea las aplicaciones no autorizadas y vuelve al espacio infantil. Todo ocurre localmente en la tableta: no se recopilan, almacenan ni transmiten datos.</string>
+    <string name="disclosure_accept">Aceptar y configurar</string>
+    <string name="disclosure_later">Más tarde</string>
+    <string name="privacy_policy">Política de privacidad</string>
 </resources>

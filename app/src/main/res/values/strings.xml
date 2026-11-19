@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mode Enfant</string>
+    <string name="app_name">KidoLock</string>
     <string name="service_name">Mode Enfant – session guardian</string>
     <string name="service_desc">During a child session only, this service checks which app is in the foreground to bring your child back to their allowed apps and show time warnings. It does not read screen content and sends no data. Outside a session, it does nothing.</string>
 
@@ -75,4 +75,10 @@
     <string name="kid_mood_end">Time\'s up, well done!</string>
     <string name="add_5min">+5 min</string>
     <string name="add_15min">+15 min</string>
+    <string name="disclosure_title">Permission required</string>
+    <string name="disclosure_text">KidoLock uses the Android accessibility service to detect the app in the foreground and enforce the child\'s session time: it blocks unauthorized apps and returns to the kids\' space. Everything happens locally on the tablet: no data is collected, stored or transmitted.</string>
+    <string name="disclosure_accept">Accept and set up</string>
+    <string name="disclosure_later">Later</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="privacy_url" translatable="false">https://hquezser.github.io/kidolock/privacy.html</string>
 </resources>

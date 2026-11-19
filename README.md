@@ -28,11 +28,15 @@ compatible Android 8 et plus.
 ## Installer
 
 ```bash
-./build.sh install      # build + adb install (ou ./build.sh seul → build/mode-enfant.apk)
+./build.sh install      # build debug + adb install
+./build.sh              # assembleDebug → app/build/outputs/apk/debug/
+./build.sh release      # bundleRelease → AAB (signé si keystore.properties présent)
 ```
 
-Le build utilise uniquement le SDK local (`/opt/homebrew/share/android-sdk`, build-tools 36)
-et le JDK 17. Pas besoin de Gradle.
+Le projet utilise **Gradle** (wrapper `./gradlew`, AGP 8.13.2, compileSdk/targetSdk 36) et le JDK 17.
+Pour signer la release : copier `keystore.properties.example` en `keystore.properties` et générer
+le keystore (voir l'en-tête du fichier). Sans lui, le bundle est produit non signé.
+`JAVA_HOME` doit pointer vers un JDK 17+ (`export JAVA_HOME=/opt/homebrew/opt/openjdk@17`).
 
 ## Première utilisation (2 minutes)
 
