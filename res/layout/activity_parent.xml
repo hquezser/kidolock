@@ -98,25 +98,106 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/style_label"
                 android:textSize="16sp" />
+
+            <!-- Option « petit » : mascotte + nom + aperçu vocal -->
+            <LinearLayout
+                android:id="@+id/style_young_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+                <ImageView
+                    android:id="@+id/style_young_img"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:contentDescription="@null" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/style_young"
+                    android:textColor="@color/text_main"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/preview_young"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/listen" />
+            </LinearLayout>
+
+            <!-- Option « grand » : idem avec la mascotte ado -->
+            <LinearLayout
+                android:id="@+id/style_mature_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+                <ImageView
+                    android:id="@+id/style_mature_img"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:contentDescription="@null" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/style_mature"
+                    android:textColor="@color/text_main"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/preview_mature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/listen" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/CardText"
+                android:layout_marginTop="12dp"
+                android:text="@string/lang_label"
+                android:textSize="16sp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:orientation="horizontal">
                 <Button
-                    android:id="@+id/style_young"
+                    android:id="@+id/lang_auto"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/style_young" />
+                    android:text="Auto" />
                 <Button
-                    android:id="@+id/style_mature"
+                    android:id="@+id/lang_fr"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="6dp"
                     android:layout_weight="1"
-                    android:text="@string/style_mature" />
+                    android:text="FR" />
+                <Button
+                    android:id="@+id/lang_en"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:text="EN" />
+                <Button
+                    android:id="@+id/lang_es"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:text="ES" />
             </LinearLayout>
+
             <Button
                 android:id="@+id/pin_btn"
                 android:layout_width="wrap_content"

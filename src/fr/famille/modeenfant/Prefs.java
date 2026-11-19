@@ -75,6 +75,15 @@ final class Prefs {
         sp.edit().putInt("maturity", tier).apply();
     }
 
+    /** Langue choisie : « system » (défaut) ou fr/en/es. */
+    String language() {
+        return sp.getString("language", Locales.SYSTEM);
+    }
+
+    void setLanguage(String lang) {
+        sp.edit().putString("language", lang).apply();
+    }
+
     // --- Session en cours ---
 
     boolean sessionActive() {

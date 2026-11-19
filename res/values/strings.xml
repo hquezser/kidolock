@@ -58,4 +58,6 @@
     <string name="style_label">Robot &amp; voice</string>
     <string name="style_young">Little · ages 3–6</string>
     <string name="style_mature">Big · ages 7–11</string>
+    <string name="lang_label">Language</string>
+    <string name="listen">Listen</string>
 </resources>

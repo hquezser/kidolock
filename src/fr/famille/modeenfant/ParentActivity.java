@@ -2,13 +2,17 @@ package fr.famille.modeenfant;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,14 +22,23 @@ public class ParentActivity extends Activity {
     private static final int[] PRESETS = {15, 30, 45, 60, 90};
     /** Après 2 min en arrière-plan, on redemande le code (sinon un enfant trouverait l'écran ouvert). */
     private static final long RELOCK_MS = 2 * 60_000L;
+    private static final int[] LANG_BTNS = {R.id.lang_auto, R.id.lang_fr, R.id.lang_en, R.id.lang_es};
+    private static final String[] LANG_CODES = {Locales.SYSTEM, "fr", "en", "es"};
 
     private Prefs prefs;
     private View content;
     private TextView serviceStatus, appsCount, durationText;
-    private Button serviceBtn, startBtn, styleYoung, styleMature;
+    private Button serviceBtn, startBtn;
+    private View styleYoungRow, styleMatureRow;
+    private MediaPlayer preview;
     private boolean unlocked;
     private long stoppedAt;
     private int minutes;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(Locales.wrap(base));
+    }
 
     @Override
     protected void onCreate(Bundle state) {
@@ -53,10 +66,21 @@ public class ParentActivity extends Activity {
         voice.setChecked(prefs.voiceEnabled());
         voice.setOnCheckedChangeListener((b, on) -> prefs.setVoiceEnabled(on));
 
-        styleYoung = findViewById(R.id.style_young);
-        styleMature = findViewById(R.id.style_mature);
-        styleYoung.setOnClickListener(v -> setMaturity(0));
-        styleMature.setOnClickListener(v -> setMaturity(1));
+        styleYoungRow = findViewById(R.id.style_young_row);
+        styleMatureRow = findViewById(R.id.style_mature_row);
+        ((ImageView) findViewById(R.id.style_young_img))
+                .setImageResource(Ui.drawableForTier(this, "mascotte_actif", 0));
+        ((ImageView) findViewById(R.id.style_mature_img))
+                .setImageResource(Ui.drawableForTier(this, "mascotte_actif", 1));
+        styleYoungRow.setOnClickListener(v -> setMaturity(0));
+        styleMatureRow.setOnClickListener(v -> setMaturity(1));
+        findViewById(R.id.preview_young).setOnClickListener(v -> playPreview(0));
+        findViewById(R.id.preview_mature).setOnClickListener(v -> playPreview(1));
+
+        for (int i = 0; i < LANG_BTNS.length; i++) {
+            final String code = LANG_CODES[i];
+            findViewById(LANG_BTNS[i]).setOnClickListener(v -> setLanguage(code));
+        }
 
         LinearLayout presets = findViewById(R.id.presets);
         for (int m : PRESETS) {
@@ -113,13 +137,56 @@ public class ParentActivity extends Activity {
         durationText.setText(minutes + " min");
         startBtn.setEnabled(on);
         startBtn.setAlpha(on ? 1f : 0.5f);
-        styleYoung.setAlpha(prefs.maturity() == 0 ? 1f : 0.5f);
-        styleMature.setAlpha(prefs.maturity() == 1 ? 1f : 0.5f);
+
+        int tier = prefs.maturity();
+        styleYoungRow.setBackground(Ui.rounded(this,
+                tier == 0 ? 0x33FB8C00 : 0xFFF5F6FA, 12));
+        styleMatureRow.setBackground(Ui.rounded(this,
+                tier == 1 ? 0x33FB8C00 : 0xFFF5F6FA, 12));
+
+        String lang = prefs.language();
+        for (int i = 0; i < LANG_BTNS.length; i++) {
+            ((Button) findViewById(LANG_BTNS[i])).setAlpha(LANG_CODES[i].equals(lang) ? 1f : 0.5f);
+        }
     }
 
     private void setMaturity(int tier) {
         prefs.setMaturity(tier);
         render();
+    }
+
+    private void setLanguage(String code) {
+        if (code.equals(prefs.language())) return;
+        prefs.setLanguage(code);
+        recreate();
+    }
+
+    /** « Bip-bip ! Coucou ! » du tier choisi, dans la langue choisie. */
+    private void playPreview(int tier) {
+        stopPreview();
+        int res = Ui.rawForTier(this, "apercu", tier);
+        if (res == 0) return;
+        AudioAttributes attrs = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                .build();
+        preview = MediaPlayer.create(this, res, attrs, 0);
+        if (preview == null) return;
+        preview.setOnCompletionListener(mp -> stopPreview());
+        preview.start();
+    }
+
+    private void stopPreview() {
+        if (preview != null) {
+            preview.release();
+            preview = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopPreview();
+        super.onDestroy();
     }
 
     private void setMinutes(int m) {

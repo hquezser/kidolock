@@ -2,6 +2,7 @@ package fr.famille.modeenfant;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,11 @@ public class KidHomeActivity extends Activity {
             handler.postDelayed(this, 1000);
         }
     };
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(Locales.wrap(base));
+    }
 
     @Override
     protected void onCreate(Bundle state) {

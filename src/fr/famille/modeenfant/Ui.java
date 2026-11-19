@@ -28,7 +28,10 @@ final class Ui {
      * Repli sur la base si la variante n'existe pas encore.
      */
     static int drawableFor(Context c, String base) {
-        int tier = Prefs.get(c).maturity();
+        return drawableForTier(c, base, Prefs.get(c).maturity());
+    }
+
+    static int drawableForTier(Context c, String base, int tier) {
         if (tier > 0) {
             int id = c.getResources().getIdentifier(base + "_t" + tier, "drawable", c.getPackageName());
             if (id != 0) return id;
@@ -38,7 +41,10 @@ final class Ui {
 
     /** Idem pour res/raw (annonces vocales). */
     static int rawFor(Context c, String name) {
-        int tier = Prefs.get(c).maturity();
+        return rawForTier(c, name, Prefs.get(c).maturity());
+    }
+
+    static int rawForTier(Context c, String name, int tier) {
         if (tier > 0) {
             int id = c.getResources().getIdentifier(name + "_t" + tier, "raw", c.getPackageName());
             if (id != 0) return id;

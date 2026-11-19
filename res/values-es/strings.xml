@@ -58,4 +58,6 @@
     <string name="style_label">Robot y voz</string>
     <string name="style_young">Pequeño · 3–6 años</string>
     <string name="style_mature">Mayor · 7–11 años</string>
+    <string name="lang_label">Idioma</string>
+    <string name="listen">Escuchar</string>
 </resources>

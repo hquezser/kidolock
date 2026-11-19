@@ -1,6 +1,7 @@
 package fr.famille.modeenfant;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,11 @@ public class AppListActivity extends Activity {
     private Prefs prefs;
     private Set<String> allowed;
     private BaseAdapter adapter;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(Locales.wrap(base));
+    }
 
     @Override
     protected void onCreate(Bundle state) {

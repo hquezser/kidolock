@@ -91,6 +91,11 @@ public class GuardService extends AccessibilityService {
     // ------------------------------------------------------------------ cycle de vie
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(Locales.wrap(base));
+    }
+
+    @Override
     protected void onServiceConnected() {
         instance = this;
         prefs = Prefs.get(this);
@@ -188,7 +193,7 @@ public class GuardService extends AccessibilityService {
         v.setGravity(Gravity.CENTER);
         v.setBackgroundColor(getColor(R.color.kid_bg));
         v.addView(text("🏠", 96, getColor(R.color.kid_text)));
-        v.addView(text(getString(R.string.curtain_text), 28, getColor(R.color.kid_text)));
+        v.addView(text(Locales.wrap(this).getString(R.string.curtain_text), 28, getColor(R.color.kid_text)));
         v.setOnClickListener(x -> {
             lastLaunch = 0;
             launchKidHome();
@@ -251,8 +256,9 @@ public class GuardService extends AccessibilityService {
         int min = (int) (at / MIN);
         // Robot content pour les rappels, fatigué quand ça devient urgent.
         String state = min <= 2 ? "mascotte_fatigue" : "mascotte_actif";
+        Context l10n = Locales.wrap(this);
         showBanner(Ui.drawableFor(this, state),
-                min == 1 ? getString(R.string.warn_last_minute) : getString(R.string.warn_minutes, min));
+                min == 1 ? l10n.getString(R.string.warn_last_minute) : l10n.getString(R.string.warn_minutes, min));
         speak(Ui.rawFor(this, min == 10 ? "voix_10min" : min == 5 ? "voix_5min" : min == 2 ? "voix_2min" : "voix_1min"));
     }
 
@@ -419,7 +425,7 @@ public class GuardService extends AccessibilityService {
                 .setUsage(AudioAttributes.USAGE_MEDIA)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                 .build();
-        voice = MediaPlayer.create(this, rawRes, attrs, 0);
+        voice = MediaPlayer.create(Locales.wrap(this), rawRes, attrs, 0);
         if (voice == null) return;
         voice.setOnCompletionListener(mp -> stopVoice());
         voice.start();
