@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -248,7 +249,9 @@ public class GuardService extends AccessibilityService {
 
     private void warn(long at) {
         int min = (int) (at / MIN);
-        showBanner(min == 1 ? getString(R.string.warn_last_minute) : getString(R.string.warn_minutes, min));
+        // Robot content pour les rappels, fatigué quand ça devient urgent.
+        int mascot = min <= 2 ? R.drawable.mascotte_fatigue : R.drawable.mascotte_actif;
+        showBanner(mascot, min == 1 ? getString(R.string.warn_last_minute) : getString(R.string.warn_minutes, min));
         speak(min == 10 ? R.raw.voix_10min : min == 5 ? R.raw.voix_5min : min == 2 ? R.raw.voix_2min : R.raw.voix_1min);
     }
 
@@ -339,7 +342,7 @@ public class GuardService extends AccessibilityService {
 
     // ------------------------------------------------------------------ avertissements
 
-    private void showBanner(String message) {
+    private void showBanner(int mascotRes, String message) {
         removeBanner();
         LinearLayout v = new LinearLayout(this);
         v.setGravity(Gravity.CENTER_VERTICAL);
@@ -347,6 +350,12 @@ public class GuardService extends AccessibilityService {
         v.setPadding(p, p / 2, p + p / 2, p / 2);
         v.setBackground(Ui.rounded(this, 0xF2FFFFFF, 40));
         v.setElevation(Ui.dp(this, 8));
+        ImageView mascot = new ImageView(this);
+        mascot.setImageResource(mascotRes);
+        int ms = Ui.dp(this, 52);
+        LinearLayout.LayoutParams mlp = new LinearLayout.LayoutParams(ms, ms);
+        mlp.setMargins(0, 0, Ui.dp(this, 10), 0);
+        v.addView(mascot, mlp);
         TimerView t = new TimerView(this);
         t.setFraction(total > 0 ? remaining / (float) total : 0f);
         int s = Ui.dp(this, 56);
