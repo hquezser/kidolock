@@ -66,6 +66,7 @@ public class AppListActivity extends Activity {
         };
         ListView list = findViewById(R.id.list);
         list.setAdapter(adapter);
+        findViewById(R.id.done_btn).setOnClickListener(v -> finish());
         list.setOnItemClickListener((p, v, pos, id) -> {
             String pkg = apps.get(pos).pkg;
             if (!allowed.remove(pkg)) allowed.add(pkg);

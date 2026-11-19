@@ -80,4 +80,5 @@
     <string name="disclosure_accept">Aceptar y configurar</string>
     <string name="disclosure_later">Más tarde</string>
     <string name="privacy_policy">Política de privacidad</string>
+    <string name="done">Listo</string>
 </resources>

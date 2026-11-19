@@ -81,4 +81,5 @@
     <string name="disclosure_later">Later</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="privacy_url" translatable="false">https://hquezser.github.io/kidolock/privacy.html</string>
+    <string name="done">Done</string>
 </resources>
