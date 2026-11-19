@@ -17,6 +17,12 @@ final class Ui {
         return g;
     }
 
+    static GradientDrawable roundedStroke(Context c, int fill, int stroke, float radiusDp, float strokeDp) {
+        GradientDrawable g = rounded(c, fill, radiusDp);
+        g.setStroke(dp(c, strokeDp), stroke);
+        return g;
+    }
+
     /** « 12 min » au-delà d'une minute, puis « 45 s ». */
     static String formatRemaining(long ms) {
         if (ms >= 60_000) return ((ms + 59_999) / 60_000) + " min";

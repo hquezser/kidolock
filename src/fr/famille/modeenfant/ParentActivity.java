@@ -11,13 +11,17 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/** Écran parent : 3 étapes visibles d'un coup (service, applis, durée) et un gros bouton « Lancer ». */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+/** Écran parent : service, applis, durée, options (voix, robot, langue) — design « tableau de bord ». */
 public class ParentActivity extends Activity {
     private static final int[] PRESETS = {15, 30, 45, 60, 90};
     /** Après 2 min en arrière-plan, on redemande le code (sinon un enfant trouverait l'écran ouvert). */
@@ -29,7 +33,9 @@ public class ParentActivity extends Activity {
     private View content;
     private TextView serviceStatus, appsCount, durationText;
     private Button serviceBtn, startBtn;
-    private View styleYoungRow, styleMatureRow;
+    private View styleCardYoung, styleCardMature, checkYoung, checkMature, personaBox;
+    private Switch voice;
+    private final List<Button> presetBtns = new ArrayList<>();
     private MediaPlayer preview;
     private boolean unlocked;
     private long stoppedAt;
@@ -53,6 +59,7 @@ public class ParentActivity extends Activity {
         durationText = findViewById(R.id.duration);
         serviceBtn = findViewById(R.id.service_btn);
         startBtn = findViewById(R.id.start_btn);
+        personaBox = findViewById(R.id.persona_box);
 
         serviceBtn.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)));
         findViewById(R.id.apps_btn).setOnClickListener(v -> startActivity(new Intent(this, AppListActivity.class)));
@@ -62,21 +69,30 @@ public class ParentActivity extends Activity {
         findViewById(R.id.pin_btn).setOnClickListener(v -> PinPad.createPin(this, true,
                 () -> Toast.makeText(this, R.string.pin_changed, Toast.LENGTH_SHORT).show()));
 
-        CheckBox voice = findViewById(R.id.voice);
+        voice = findViewById(R.id.voice);
         voice.setChecked(prefs.voiceEnabled());
-        voice.setOnCheckedChangeListener((b, on) -> prefs.setVoiceEnabled(on));
+        voice.setOnCheckedChangeListener((b, on) -> {
+            prefs.setVoiceEnabled(on);
+            render();
+        });
 
-        styleYoungRow = findViewById(R.id.style_young_row);
-        styleMatureRow = findViewById(R.id.style_mature_row);
+        styleCardYoung = findViewById(R.id.style_card_young);
+        styleCardMature = findViewById(R.id.style_card_mature);
+        checkYoung = findViewById(R.id.style_check_young);
+        checkMature = findViewById(R.id.style_check_mature);
         ((ImageView) findViewById(R.id.style_young_img))
                 .setImageResource(Ui.drawableForTier(this, "mascotte_actif", 0));
         ((ImageView) findViewById(R.id.style_mature_img))
                 .setImageResource(Ui.drawableForTier(this, "mascotte_actif", 1));
-        styleYoungRow.setOnClickListener(v -> setMaturity(0));
-        styleMatureRow.setOnClickListener(v -> setMaturity(1));
+        styleCardYoung.setOnClickListener(v -> setMaturity(0));
+        styleCardMature.setOnClickListener(v -> setMaturity(1));
         findViewById(R.id.preview_young).setOnClickListener(v -> playPreview(0));
         findViewById(R.id.preview_mature).setOnClickListener(v -> playPreview(1));
 
+        // « Auto (FR) » : la langue système résolue, indicative.
+        String sys = Locale.getDefault().getLanguage();
+        sys = sys.isEmpty() ? "?" : sys.substring(0, 1).toUpperCase(Locale.ROOT) + sys.substring(1);
+        ((Button) findViewById(R.id.lang_auto)).setText(getString(R.string.lang_auto, sys.toUpperCase(Locale.ROOT)));
         for (int i = 0; i < LANG_BTNS.length; i++) {
             final String code = LANG_CODES[i];
             findViewById(LANG_BTNS[i]).setOnClickListener(v -> setLanguage(code));
@@ -85,9 +101,15 @@ public class ParentActivity extends Activity {
         LinearLayout presets = findViewById(R.id.presets);
         for (int m : PRESETS) {
             Button b = new Button(this);
-            b.setText(m + " min");
+            b.setTextSize(15);
+            b.setTypeface(b.getTypeface(), android.graphics.Typeface.BOLD);
             b.setOnClickListener(v -> setMinutes(m));
-            presets.addView(b);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+            int mg = Ui.dp(this, 4);
+            lp.setMargins(mg, 0, mg, 0);
+            presets.addView(b, lp);
+            presetBtns.add(b);
         }
 
         lock();
@@ -128,8 +150,10 @@ public class ParentActivity extends Activity {
 
     private void render() {
         boolean on = GuardService.instance != null;
-        serviceStatus.setText(on ? R.string.service_on : R.string.service_needed);
-        serviceStatus.setTextColor(getColor(on ? R.color.ok : R.color.warn));
+        serviceStatus.setText(on ? R.string.svc_active : R.string.svc_inactive);
+        serviceStatus.setTextColor(getColor(on ? R.color.success : R.color.warn));
+        serviceStatus.setBackground(Ui.rounded(this,
+                getColor(on ? R.color.success_soft : R.color.destructive_soft), 16));
         serviceBtn.setVisibility(on ? View.GONE : View.VISIBLE);
 
         int n = prefs.allowedApps().size();
@@ -138,15 +162,37 @@ public class ParentActivity extends Activity {
         startBtn.setEnabled(on);
         startBtn.setAlpha(on ? 1f : 0.5f);
 
+        // Cartes robot : sélection = fond bleu clair + bordure bleue + coche.
         int tier = prefs.maturity();
-        styleYoungRow.setBackground(Ui.rounded(this,
-                tier == 0 ? 0x33FB8C00 : 0xFFF5F6FA, 12));
-        styleMatureRow.setBackground(Ui.rounded(this,
-                tier == 1 ? 0x33FB8C00 : 0xFFF5F6FA, 12));
+        styleCardYoung.setBackground(Ui.roundedStroke(this,
+                getColor(tier == 0 ? R.color.primary_soft : android.R.color.white),
+                getColor(tier == 0 ? R.color.primary : R.color.card_stroke), 16, tier == 0 ? 2 : 1));
+        styleCardMature.setBackground(Ui.roundedStroke(this,
+                getColor(tier == 1 ? R.color.primary_soft : android.R.color.white),
+                getColor(tier == 1 ? R.color.primary : R.color.card_stroke), 16, tier == 1 ? 2 : 1));
+        checkYoung.setVisibility(tier == 0 ? View.VISIBLE : View.GONE);
+        checkMature.setVisibility(tier == 1 ? View.VISIBLE : View.GONE);
 
+        // Section persona grisée quand les annonces vocales sont coupées (design).
+        personaBox.setAlpha(voice.isChecked() ? 1f : 0.4f);
+
+        // Langue : segment sélectionné = pastille blanche, sinon texte discret.
         String lang = prefs.language();
         for (int i = 0; i < LANG_BTNS.length; i++) {
-            ((Button) findViewById(LANG_BTNS[i])).setAlpha(LANG_CODES[i].equals(lang) ? 1f : 0.5f);
+            boolean sel = LANG_CODES[i].equals(lang);
+            Button b = (Button) findViewById(LANG_BTNS[i]);
+            b.setBackground(Ui.rounded(this, getColor(sel ? android.R.color.white : 0), 12));
+            b.setTextColor(getColor(sel ? R.color.primary : R.color.text_soft));
+        }
+
+        // Presets : sélection = pastille bleue.
+        for (int i = 0; i < PRESETS.length; i++) {
+            boolean sel = minutes == PRESETS[i];
+            Button b = presetBtns.get(i);
+            b.setText(PRESETS[i] + " min");
+            b.setBackground(Ui.rounded(this,
+                    getColor(sel ? R.color.primary : R.color.secondary_grey), 24));
+            b.setTextColor(getColor(sel ? android.R.color.white : R.color.text_main));
         }
     }
 

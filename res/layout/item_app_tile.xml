@@ -6,20 +6,29 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="104dp"
-        android:layout_height="104dp"
-        android:scaleType="fitCenter" />
+    <FrameLayout
+        android:id="@+id/tile_bg"
+        android:layout_width="120dp"
+        android:layout_height="120dp">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:scaleType="fitCenter" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="2"
-        android:textColor="@color/kid_text"
-        android:textSize="18sp" />
+        android:textColor="@color/text_main"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 </LinearLayout>

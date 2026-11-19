@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#3949AB</color>
-    <color name="primary_dark">#283593</color>
-    <color name="accent">#FB8C00</color>
-    <color name="parent_bg">#F3F4F8</color>
-    <color name="card_stroke">#DDE0EA</color>
-    <color name="text_main">#1F2335</color>
-    <color name="text_soft">#5B6075</color>
-    <color name="ok">#2E7D32</color>
-    <color name="warn">#C62828</color>
-    <color name="kid_bg">#FFF4D6</color>
+    <!-- Palette issue du design mode-enfant-design (tokens shadcn/oklch → hex) -->
+    <color name="primary">#3B6FE0</color>
+    <color name="primary_dark">#2C56B8</color>
+    <color name="primary_soft">#E9EFFC</color>
+    <color name="accent">#F59E0B</color>
+    <color name="accent_glow">#FFB84D</color>
+    <color name="accent_soft">#FDF0DC</color>
+    <color name="success">#22B573</color>
+    <color name="success_soft">#E2F5E9</color>
+    <color name="destructive">#E5484D</color>
+    <color name="destructive_soft">#FCE9EA</color>
+    <color name="parent_bg">#F3F5F9</color>
+    <color name="card_stroke">#E3E7F0</color>
+    <color name="secondary_grey">#EEF1F6</color>
+    <color name="text_main">#262C3D</color>
+    <color name="text_soft">#6A7280</color>
+    <color name="ok">#22B573</color>
+    <color name="warn">#E5484D</color>
+    <color name="kid_bg">#F3F5F9</color>
     <color name="ic_launcher_background">#FFF4D6</color>
-    <color name="kid_text">#4E342E</color>
-    <color name="night">#263259</color>
+    <color name="kid_text">#262C3D</color>
+    <color name="night">#262C3D</color>
 </resources>

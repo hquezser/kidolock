@@ -60,4 +60,18 @@
     <string name="style_mature">Grand · 7–11 ans</string>
     <string name="lang_label">Langue</string>
     <string name="listen">Écouter</string>
+    <string name="svc_title">Service de surveillance</string>
+    <string name="svc_desc">Toujours actif. Hors session enfant il ne fait rien : la tablette reste libre pour les adultes.</string>
+    <string name="svc_active">Actif</string>
+    <string name="svc_inactive">À activer</string>
+    <string name="apps_title">Applications autorisées</string>
+    <string name="duration_title">Durée de la session</string>
+    <string name="security_title">Sécurité</string>
+    <string name="lang_auto">Auto (%s)</string>
+    <string name="kid_mood_ok">Amuse-toi bien !</string>
+    <string name="kid_mood_soon">Bientôt fini !</string>
+    <string name="kid_mood_last">Dernière minute !</string>
+    <string name="kid_mood_end">C\'est fini, bravo !</string>
+    <string name="add_5min">+5 min</string>
+    <string name="add_15min">+15 min</string>
 </resources>

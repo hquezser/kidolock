@@ -60,4 +60,18 @@
     <string name="style_mature">Big · ages 7–11</string>
     <string name="lang_label">Language</string>
     <string name="listen">Listen</string>
+    <string name="svc_title">Monitoring service</string>
+    <string name="svc_desc">Always on. Outside a kid session it does nothing: the tablet stays free for adults.</string>
+    <string name="svc_active">Active</string>
+    <string name="svc_inactive">To activate</string>
+    <string name="apps_title">Allowed apps</string>
+    <string name="duration_title">Session length</string>
+    <string name="security_title">Security</string>
+    <string name="lang_auto">Auto (%s)</string>
+    <string name="kid_mood_ok">Have fun!</string>
+    <string name="kid_mood_soon">Almost done!</string>
+    <string name="kid_mood_last">Last minute!</string>
+    <string name="kid_mood_end">Time\'s up, well done!</string>
+    <string name="add_5min">+5 min</string>
+    <string name="add_15min">+15 min</string>
 </resources>
