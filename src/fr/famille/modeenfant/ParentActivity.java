@@ -9,6 +9,8 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,7 +34,8 @@ public class ParentActivity extends Activity {
     private Prefs prefs;
     private View content;
     private TextView serviceStatus, appsCount, durationText;
-    private Button serviceBtn, startBtn;
+    private Button serviceBtn;
+    private MenuItem startItem;
     private View styleCardYoung, styleCardMature, checkYoung, checkMature, personaBox;
     private Switch voice;
     private final List<Button> presetBtns = new ArrayList<>();
@@ -58,15 +61,12 @@ public class ParentActivity extends Activity {
         appsCount = findViewById(R.id.apps_count);
         durationText = findViewById(R.id.duration);
         serviceBtn = findViewById(R.id.service_btn);
-        startBtn = findViewById(R.id.start_btn);
         personaBox = findViewById(R.id.persona_box);
 
         serviceBtn.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)));
         findViewById(R.id.apps_btn).setOnClickListener(v -> startActivity(new Intent(this, AppListActivity.class)));
         findViewById(R.id.minus_btn).setOnClickListener(v -> setMinutes(minutes - 5));
         findViewById(R.id.plus_btn).setOnClickListener(v -> setMinutes(minutes + 5));
-        startBtn.setOnClickListener(v -> start());
-        findViewById(R.id.start_top).setOnClickListener(v -> start());
         findViewById(R.id.pin_btn).setOnClickListener(v -> PinPad.createPin(this, true,
                 () -> Toast.makeText(this, R.string.pin_changed, Toast.LENGTH_SHORT).show()));
 
@@ -140,6 +140,24 @@ public class ParentActivity extends Activity {
         super.onStop();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.parent_menu, menu);
+        startItem = menu.findItem(R.id.action_start);
+        startItem.setEnabled(unlocked);
+        if (unlocked) render();
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_start) {
+            start();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void lock() {
         if (!prefs.hasPin()) PinPad.createPin(this, false, this::unlock);
         else PinPad.askParent(this, this::unlock, this::finish);
@@ -162,8 +180,7 @@ public class ParentActivity extends Activity {
         int n = prefs.allowedApps().size();
         appsCount.setText(n == 0 ? getString(R.string.apps_none) : getString(R.string.apps_count, n));
         durationText.setText(minutes + " min");
-        startBtn.setEnabled(on);
-        startBtn.setAlpha(on ? 1f : 0.5f);
+        if (startItem != null) startItem.setEnabled(on && unlocked);
 
         // Cartes robot : sélection = fond bleu clair + bordure bleue + coche.
         int tier = prefs.maturity();
