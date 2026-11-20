@@ -1,7 +1,7 @@
 # Mode Enfant
 
 Contrôle parental minimaliste façon Kids Place : gratuit, hors ligne, sans pub ni compte.
-APK d'environ 250 Ko (dont 200 Ko de voix) en Java pur, sans aucune dépendance. Cible : Nexus 10 / LineageOS 17.1 (Android 10),
+APK d'environ 250 Ko (dont 200 Ko de voix) en Java pur, sans aucune dépendance. Validé sur : Nexus 10 / LineageOS 17.1 (Android 10),
 compatible Android 8 et plus.
 
 ## Ce que ça fait
